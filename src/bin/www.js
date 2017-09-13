@@ -4,8 +4,9 @@
  * Module dependencies.
  */
 
-var app = require('../app').app;
-var socketio = require('../app').socketio;
+var scrumboard = require('../app')();
+var app = scrumboard.app;
+var socketio = scrumboard.socketio;
 var debug = require('debug')('basic-app:server');
 var http = require('http');
 
