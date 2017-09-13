@@ -2,53 +2,63 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const assert = require('assert');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const collections = require('./modules/collections');
 const morgan = require('morgan');
+const config = require('./config');
 
 //TODO: remove
 const loggedInRedirect = require('./controllers/helpers').loggedInRedirect;
 const requiresLoginRedirect = require('./controllers/helpers').requiresLoginRedirect;
 
-let server = require('http').Server(app);
 let socketio = require('socket.io')();
 let socketInit = require('./socketInit');
-const routes = require('./controllers')(socketio);
 
 //App Settings
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
 app.use('/assets/', express.static(__dirname + '/assets'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
-let sessionMiddleware = session({
-  resave: false, // don't save session if unmodified
-  saveUninitialized: false, // don't create session until something stored
-  secret: 'everything is secret'
-});
-app.use(morgan('tiny'));
-app.use(sessionMiddleware);
+module.exports = function(_config) {
+    if (_config) {
+        /**
+         * Important for func testing: this must be done before require()ing the routes.
+         * That way the dynamically configured test db url is configured first.
+         */
+        config.setConfigValues(_config);
+    }
+    const routes = require('./controllers')(socketio);
 
-app.use('/', routes);
+    let sessionMiddleware = session({
+        resave: false, // don't save session if unmodified
+        saveUninitialized: false, // don't create session until something stored
+        secret: 'everything is secret'
+    });
+    if (config.get('logLevel') === "verbose") {
+        app.use(morgan('tiny'));
+    }
+    app.use(sessionMiddleware);
 
-app.get('/home', requiresLoginRedirect, function(req, res) {
-    res.render('pages/teamhome');
-});
+    app.use('/', routes);
 
-socketio.use(function(socket, next) {
-    sessionMiddleware(socket.request, socket.request.res, next);
-});
+    app.get('/home', requiresLoginRedirect, function (req, res) {
+        res.render('pages/teamhome');
+    });
 
-socketio.on('connection', socketInit);
+    socketio.use(function (socket, next) {
+        sessionMiddleware(socket.request, socket.request.res, next);
+    });
 
-app.get('/', loggedInRedirect, function(req, res) {
-    res.render('pages/index');
-});
+    socketio.on('connection', socketInit);
 
-module.exports = {
-    app: app,
-    socketio: socketio
+    app.get('/', loggedInRedirect, function (req, res) {
+        res.render('pages/index');
+    });
+
+    return {
+        app: app,
+        socketio: socketio
+    };
 };

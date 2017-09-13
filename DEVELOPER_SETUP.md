@@ -21,6 +21,8 @@ Install the program's dependencies by running `npm install` in the directory you
 ### IntelliJ (written by Kevin)
 I've had success working on this project in IntelliJ Ultimate.
  - In IntelliJ, create a new project from existing sources, and select the path to the repository you just cloned.
+ 
+Make sure that the values in "config.json" are correct.
 
 Set up the run configurations:
  - In the Run Configuration dropdown, click "Edit Configurations".
@@ -29,7 +31,6 @@ Set up the run configurations:
    - Click the plus button again and create a new Gulp.js configuration.
      - Name it "run" and under gulp tasks select `run`.
      - In the "before launch" section, click the plus and select "Run another configuration". Select the "build" configuration you just created.
-     - In the "Environment" setting create a new environment variable called `SCRUM_MONGO` and set it to `mongodb://localhost`.
      - In the top of the window, check the checkbox for "Single instance only".
    - Click the plus button again and create a new npm configuration.
      - Name it something like "start Mongo".
