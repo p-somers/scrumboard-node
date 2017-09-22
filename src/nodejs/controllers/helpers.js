@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const teams = require('../modules/collections').teams;
+let collections, teams;
 
 function checkPostPermissionForTeam(req, res, next) {
     let teamId = req.params.teamId;
@@ -86,11 +86,17 @@ function logOut(req) {
     });
 }
 
-module.exports.checkPostPermissionForTeam = checkPostPermissionForTeam;
-module.exports.checkGetPermissionForTeam = checkGetPermissionForTeam;
-module.exports.requiresLoginRedirect = requiresLoginRedirect;
-module.exports.requiresLogin = requiresLogin;
-module.exports.loggedInRedirect = loggedInRedirect;
-module.exports.isLoggedIn = isLoggedIn;
-module.exports.logIn = logIn;
-module.exports.logOut = logOut;
+module.exports = async () => {
+    collections = await require('../modules/collections')();
+    teams = collections.teams;
+    return {
+        checkPostPermissionForTeam: checkPostPermissionForTeam,
+        checkGetPermissionForTeam: checkGetPermissionForTeam,
+        requiresLoginRedirect: requiresLoginRedirect,
+        requiresLogin: requiresLogin,
+        loggedInRedirect: loggedInRedirect,
+        isLoggedIn: isLoggedIn,
+        logIn: logIn,
+        logOut: logOut
+    }
+};

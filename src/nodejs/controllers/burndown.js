@@ -2,13 +2,6 @@ const routes = require('express').Router({mergeParams: true});
 const assert = require('assert');
 const uuidV4 = require('uuid/v4');
 
-const requiresLogin = require('./helpers').requiresLogin;
-const checkGetPermissionForTeam = require('./helpers').checkGetPermissionForTeam;
-const checkPostPermissionForTeam = require('./helpers').checkPostPermissionForTeam;
-const burndowns = require('../modules/collections').burndowns;
-const teams = require('../modules/collections').teams;
-const stories = require('../modules/collections').stories;
-
 function createBurndown(req, res) {
     let teamId = req.params.teamId;
     burndowns.insert(
@@ -20,8 +13,22 @@ function createBurndown(req, res) {
     );
 }
 
+let teams, burndowns, stories, requiresLogin, checkGetPermissionForTeam, checkPostPermissionForTeam;
+async function waitForPersistence() {
+    let collections = await require('../modules/collections')();
+    let helpers = await require('./helpers')();
 
-module.exports = function(socketio) {
+    teams = collections.teams;
+    burndowns = collections.burndowns;
+    stories = collections.stories;
+    requiresLogin = helpers.requiresLogin;
+    checkPostPermissionForTeam = helpers.checkPostPermissionForTeam;
+    checkGetPermissionForTeam = helpers.checkGetPermissionForTeam;
+}
+
+module.exports = async function(socketio) {
+    await waitForPersistence();
+
     routes.get('/', requiresLogin, checkGetPermissionForTeam, function (req, res, next) {
         let teamId = req.params.teamId;
         burndowns.find(

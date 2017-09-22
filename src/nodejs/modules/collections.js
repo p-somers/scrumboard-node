@@ -1,14 +1,16 @@
-const MongoCollection = require('./MongoCollection');
-const usersCollection = new MongoCollection('users');
-const companiesCollection = new MongoCollection('companies');
-const teamsCollection = new MongoCollection('teams');
-const storiesCollection = new MongoCollection('stories');
-const burndownsCollection = new MongoCollection('burndowns');
+const Database = require('./MongoDB');
+const Collection = require('./MongoCollection');
 
-module.exports = {
-    users: usersCollection,
-    companies: companiesCollection,
-    teams: teamsCollection,
-    stories: storiesCollection,
-    burndowns: burndownsCollection
+let collections = Database.connect().then(db => {
+    return {
+        users: new Collection(db, 'users'),
+        companies: new Collection(db, 'companies'),
+        teams: new Collection(db, 'teams'),
+        stories: new Collection(db, 'stories'),
+        burndowns: new Collection(db, 'burndowns')
+    };
+});
+
+module.exports = async function() {
+    return await collections;
 };

@@ -7,12 +7,16 @@ const session = require('express-session');
 const morgan = require('morgan');
 const config = require('./config');
 
-//TODO: remove
-const loggedInRedirect = require('./controllers/helpers').loggedInRedirect;
-const requiresLoginRedirect = require('./controllers/helpers').requiresLoginRedirect;
-
 let socketio = require('socket.io')();
 let socketInit = require('./socketInit');
+
+let requiresLoginRedirect, loggedInRedirect;
+async function waitForPersistence() {
+    let helpers = await require('./controllers/helpers')();
+
+    requiresLoginRedirect = helpers.requiresLoginRedirect;
+    loggedInRedirect = helpers.loggedInRedirect;
+}
 
 //App Settings
 app.set('view engine', 'ejs');
@@ -21,7 +25,8 @@ app.use('/assets/', express.static(__dirname + '/assets'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-module.exports = function(_config) {
+module.exports = async function(_config) {
+    await waitForPersistence();
     if (_config) {
         /**
          * Important for func testing: this must be done before require()ing the routes.
@@ -29,7 +34,14 @@ module.exports = function(_config) {
          */
         config.setConfigValues(_config);
     }
-    const routes = require('./controllers')(socketio);
+    try {
+        const routes = await require('./controllers')(socketio);
+        app.use('/', routes);
+    }
+    catch(ex) {
+        console.error(ex);
+        process.exit(-1);
+    }
 
     let sessionMiddleware = session({
         resave: false, // don't save session if unmodified
@@ -40,8 +52,6 @@ module.exports = function(_config) {
         app.use(morgan('tiny'));
     }
     app.use(sessionMiddleware);
-
-    app.use('/', routes);
 
     app.get('/home', requiresLoginRedirect, function (req, res) {
         res.render('pages/teamhome');

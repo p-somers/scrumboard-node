@@ -5,10 +5,14 @@ const uuidV4 = require('uuid/v4');
 
 const logIn = require('./helpers').logIn;
 const logOut = require('./helpers').logOut;
-const users = require('../modules/collections').users;
-const companies = require('../modules/collections').companies;
 
-module.exports = function() {
+let collections, users, companies;
+
+module.exports = async function() {
+    collections = await require('../modules/collections')();
+    users = collections.users;
+    companies = collections.companies;
+
     routes.get('/logOut', function (req, res) {
         logOut(req);
         res.redirect('/');

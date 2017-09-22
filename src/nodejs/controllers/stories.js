@@ -2,11 +2,19 @@ const routes = require('express').Router({mergeParams: true});
 const uuidV4 = require('uuid/v4');
 const assert = require('assert');
 
-const requiresLogin = require('./helpers').requiresLogin;
-const teams = require('../modules/collections').teams;
-const stories = require('../modules/collections').stories;
+let teams, stories, requiresLogin;
+async function waitForPersistence() {
+    let collections = await require('../modules/collections')();
+    let helpers = await require('./helpers')();
 
-module.exports = function(socketio) {
+    teams = collections.teams;
+    stories = collections.stories;
+    requiresLogin = helpers.requiresLogin;
+}
+
+module.exports = async function(socketio) {
+    await waitForPersistence();
+
     routes.post('/', requiresLogin, function(req, res) {
         let teamId = req.params.teamId;
         let name = req.body.name;

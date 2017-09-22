@@ -1,40 +1,43 @@
 #!/usr/bin/env node
+const debug = require('debug')('basic-app:server');
+const http = require('http');
+let server, port;
 
 /**
  * Module dependencies.
  */
 
-var scrumboard = require('../app')();
-var app = scrumboard.app;
-var socketio = scrumboard.socketio;
-var debug = require('debug')('basic-app:server');
-var http = require('http');
+require('../app')().then(scrumboard => {
+    let app = scrumboard.app;
+    let socketio = scrumboard.socketio;
 
-/**
- * Get port from environment and store in Express.
- */
+    /**
+     * Get port from environment and store in Express.
+     */
 
-var port = normalizePort(process.env.PORT || '5000');
-app.set('port', port);
+    port = normalizePort(process.env.PORT || '5000');
+    app.set('port', port);
 
-/**
- * Create HTTP server.
- */
+    /**
+     * Create HTTP server.
+     */
 
-var server = http.createServer(app);
+    server = http.createServer(app);
 
-/**
- * Connect socket.io to server.
- */
-socketio.attach(server);
+    /**
+     * Connect socket.io to server.
+     */
+    socketio.attach(server);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+
+});
 
 /**
  * Normalize a port into a number, string, or false.

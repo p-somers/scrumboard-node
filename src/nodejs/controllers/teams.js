@@ -2,14 +2,22 @@ const routes = require('express').Router();
 const assert = require('assert');
 const uuidV4 = require('uuid/v4');
 
-const requiresLogin = require('./helpers').requiresLogin;
-const checkPostPermissionForTeam = require('./helpers').checkPostPermissionForTeam;
-const teams = require('../modules/collections').teams;
+let teams, requiresLogin, checkPostPermissionForTeam;
+async function waitForPersistence() {
+    let collections = await require('../modules/collections')();
+    let helpers = await require('./helpers')();
+
+    teams = collections.teams;
+    requiresLogin = helpers.requiresLogin;
+    checkPostPermissionForTeam = helpers.checkPostPermissionForTeam;
+}
 
 const updatableProperties = ['columnNames', 'name'];
 
-module.exports = function(socketio) {
-//TODO: update to not allow duplicate names within same company probably
+module.exports = async function(socketio) {
+    await waitForPersistence();
+
+    //TODO: update to not allow duplicate names within same company probably
     routes.post('/', requiresLogin, function (req, res) {
         let name = req.body.name;
         let defaultColumns = ['Not Started', 'In Progress', 'To Be Verified', 'Done'];
