@@ -3,15 +3,19 @@ const assert = require('assert');
 const bcrypt = require('bcryptjs');
 const uuidV4 = require('uuid/v4');
 
-const logIn = require('./helpers').logIn;
-const logOut = require('./helpers').logOut;
+let users, companies, logIn, logOut;
+async function waitForPersistence() {
+    let collections = await require('../modules/collections')();
+    let helpers = await require('./helpers')();
 
-let collections, users, companies;
-
-module.exports = async function() {
-    collections = await require('../modules/collections')();
     users = collections.users;
     companies = collections.companies;
+    logIn = helpers.logIn;
+    logOut = helpers.logOut;
+}
+
+module.exports = async function() {
+    await waitForPersistence();
 
     routes.get('/logOut', function (req, res) {
         logOut(req);
