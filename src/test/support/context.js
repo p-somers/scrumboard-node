@@ -6,27 +6,28 @@ const TEST_TIMEOUT = 10 * 1000;
 let baseUrl = config.baseUrl || 'http://localhost';
 let port = config.port || 5001;
 
-let start = process.hrtime();
-let uncalledTestSuites = [];
 //Start the test server
 let testServerConfig = {
     logLevel: "silent",
     mongoUrl: "mongodb://localhost:27017/testdb"
 };
-let scrumboard = require('../../../build/app')(testServerConfig);
-let socketio = scrumboard.socketio;
-let app = scrumboard.app;
-app.set('port', port);
-let server = http.createServer(app);
-socketio.attach(server);
-server.listen(port);
-console.log('starting test server');
-server.on('listening', function() {
-    console.log('Server listening', process.hrtime(start));
-    uncalledTestSuites.forEach(function (test) {
-        _suite(test.description, test.func);
+
+function startServer(scrumboard) {
+    let socketio = scrumboard.socketio;
+    let app = scrumboard.app;
+    app.set('port', port);
+    let server = http.createServer(app);
+    socketio.attach(server);
+    return new Promise((resolve) => {
+        server.listen(port, resolve);
     });
-});
+}
+
+async function setup() {
+    let dataTasks = await require('./dataTasks')(testServerConfig.mongoUrl);
+    await dataTasks.deleteData();
+    await require('../../../build/app')(testServerConfig).then(startServer);
+}
 
 let DomNode = require('./DomNode');
 
@@ -69,12 +70,14 @@ afterEach = function(func) {
     _afterEach.call(mocha, wdio.wrap(func));
 };
 
-let _suite = function(description, func) {
+suite = function(description, func) {
     describe(description, function() {
         this.timeout(TEST_TIMEOUT);
 
         // Initialize selenium standalone server if it is not started yet
         before(wdio.initSelenium);
+
+        before(setup);
 
         before(function() {
             browser.init();
@@ -87,13 +90,3 @@ let _suite = function(description, func) {
         func();
     });
 };
-
-suite = function(description, func) {
-    console.log('Suite registered', process.hrtime(start));
-    if (server.listening) {
-        _suite(description, func);
-    }
-    else {
-        uncalledTestSuites.push({description: description, func: func});
-    }
-}
