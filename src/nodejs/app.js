@@ -26,7 +26,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 module.exports = async function(_config) {
-    await waitForPersistence();
     if (_config) {
         /**
          * Important for func testing: this must be done before require()ing the routes.
@@ -34,6 +33,7 @@ module.exports = async function(_config) {
          */
         config.setConfigValues(_config);
     }
+    await waitForPersistence();
 
     let sessionMiddleware = session({
         resave: false, // don't save session if unmodified
