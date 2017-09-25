@@ -34,14 +34,6 @@ module.exports = async function(_config) {
          */
         config.setConfigValues(_config);
     }
-    try {
-        const routes = await require('./controllers')(socketio);
-        app.use('/', routes);
-    }
-    catch(ex) {
-        console.error(ex);
-        process.exit(-1);
-    }
 
     let sessionMiddleware = session({
         resave: false, // don't save session if unmodified
@@ -52,6 +44,15 @@ module.exports = async function(_config) {
         app.use(morgan('tiny'));
     }
     app.use(sessionMiddleware);
+
+    try {
+        const routes = await require('./controllers')(socketio);
+        app.use('/', routes);
+    }
+    catch(ex) {
+        console.error(ex);
+        process.exit(-1);
+    }
 
     app.get('/home', requiresLoginRedirect, function (req, res) {
         res.render('pages/teamhome');
