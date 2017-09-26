@@ -6,6 +6,7 @@
 
 		<h1>ScrumBoard v0.2</h1>
 		<h2>Sign In</h2>
+		<span id="signUpConfirmation">User created, please sign in</span>
 		<input class="input form-control" placeholder="Username" id="signInUsername">
 		<input class="input form-control" placeholder="Password" id="signInPassword" type="password">
 		<button class="btn btn-default" id="signIn">Sign In</button>
@@ -100,7 +101,8 @@
 			.done(function(data) {
 				$('#signUpFormButton').attr('disabled', false);
 				if(data.type === 'success'){
-					location.href = '/home';
+                    $('#signUpModal').modal('hide');
+                    $('#signUpConfirmation').show();
 				}
 				else {
 					alert(data.error);
