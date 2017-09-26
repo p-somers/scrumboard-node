@@ -65,8 +65,9 @@ class DomNode{
         this._browser.elementIdValue(this.webElementId, keys);
     }
 
-    getText() {
-        return this._browser.elementIdText(this.webElementId).value;
+    getText(unaltered) {
+        let text = this._browser.elementIdText(this.webElementId).value;
+        return unaltered ? text : text.trim();
     }
 
     waitTillLoaded(){
