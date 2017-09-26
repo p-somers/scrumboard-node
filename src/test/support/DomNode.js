@@ -22,7 +22,7 @@ class DomNode{
     }
 
     isDisplayed() {
-        return this._browser.elementIdDisplayed(this.webElementId);
+        return this._browser.elementIdDisplayed(this.webElementId).value;
     }
 
     getChild(selector) {
