@@ -14,6 +14,22 @@ class LoginPage extends AbstractPage {
     getSignUpConfirmation() {
         return this.getChild('#signUpConfirmation');
     }
+
+    getUsernameBox() {
+        return this.getChild('#signInUsername');
+    }
+
+    getPasswordBox() {
+        return this.getChild('#signInPassword');
+    }
+
+    getSignInButton() {
+        return this.getChild('#signIn');
+    }
+
+    getSignUpButton() {
+        return this.getChild('#signUp');
+    }
 }
 
 module.exports = LoginPage;
