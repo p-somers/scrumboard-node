@@ -2,6 +2,8 @@ const wdio = require('wdio');
 const http = require('http');
 const config = require('../config.json');
 const TEST_TIMEOUT = 10 * 1000;
+const WAITUNTIL_TIMEOUT = 5 * 1000;
+const WAITUNTIL_INTERVAL = 100;
 
 let baseUrl = config.baseUrl || 'http://localhost';
 let port = config.port || 5001;
@@ -25,7 +27,7 @@ function startServer(scrumboard) {
 
 async function setup() {
     let dataTasks = await require('./dataTasks')(testServerConfig.mongoUrl);
-    await dataTasks.deleteData();
+    await dataTasks.deleteData().then(dataTasks.prepareData());
     await require('../../../build/app')(testServerConfig).then(startServer);
 }
 
@@ -69,6 +71,10 @@ after = function(func) {
 afterEach = function(func) {
     _afterEach.call(mocha, wdio.wrap(func));
 };
+
+waitUntil = function(conditionFunc, timeoutMessage) {
+    browser.waitUntil(conditionFunc, WAITUNTIL_TIMEOUT, timeoutMessage, WAITUNTIL_INTERVAL);
+}
 
 suite = function(description, func) {
     describe(description, function() {
