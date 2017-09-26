@@ -1,0 +1,9 @@
+[
+        {
+                "username" : "test",
+                "password" : "$2a$10$zRl9aFXL.c1NQD8nNAB6c.Y7bujGw6/VFtx350ndDrybmKXFVrsUS",
+                "name" : "Test User",
+                "email" : "test@test.com",
+                "companyId" : "0a22cb75-f256-471f-8c77-62ac36b89627"
+        }
+]
