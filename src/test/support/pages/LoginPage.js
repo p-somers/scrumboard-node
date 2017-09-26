@@ -7,8 +7,12 @@ class LoginPage extends AbstractPage {
         this.checkUrl('/');
     }
 
-    getSignupModal() {
+    getSignUpModal() {
         return new SignUpModal(this._browser);
+    }
+
+    getSignUpConfirmation() {
+        return this.getChild('#signUpConfirmation');
     }
 }
 

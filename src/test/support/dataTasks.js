@@ -4,10 +4,13 @@ const tables = ['users', 'companies', 'teams', 'burndowns', 'tasks', 'stories'];
 module.exports = async function(url) {
     let db = await MongoClient.connect(url);
     return {
-        deleteData: async function() {
+        async deleteData() {
             return Promise.all(tables.map(table => {
                 return db.collection(table).deleteMany({});
             }));
+        },
+        async prepareData() {
+
         }
     }
 }
