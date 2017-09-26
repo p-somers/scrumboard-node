@@ -18,7 +18,7 @@ suite('User Creation', function () {
     describe('When user clicks sign up button', function() {
         let signUpModal;
         before(function() {
-            browser.click('#signUp');
+            page.getSignUpButton().click();
             signUpModal = page.getSignUpModal();
         });
 
