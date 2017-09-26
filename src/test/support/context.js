@@ -31,7 +31,9 @@ async function setup() {
     await require('../../../build/app')(testServerConfig).then(startServer);
 }
 
-let DomNode = require('./DomNode');
+const DomNode = require('./DomNode');
+const LoginPage = require('../support/pages/LoginPage');
+
 
 // This fixes some issues running tests in Intellij
 //     - the need to use the wdio module (and it's wrap function) since Intellij runs tests through mocha rather than through the wdio script
@@ -72,9 +74,23 @@ afterEach = function(func) {
     _afterEach.call(mocha, wdio.wrap(func));
 };
 
+getRelativeUrl = function() {
+    let url = browser.url().value;
+    return url.slice((url.lastIndexOf('/') - 1 >>> 0) + 2);
+}
+
 waitUntil = function(conditionFunc, timeoutMessage) {
     browser.waitUntil(conditionFunc, WAITUNTIL_TIMEOUT, timeoutMessage, WAITUNTIL_INTERVAL);
-}
+};
+
+login = function(username, password) {
+    browser.url('/');
+    let page = new LoginPage(browser);
+    page.getUsernameBox().sendKeys(username);
+    page.getPasswordBox().sendKeys(password);
+    page.getSignInButton().click();
+    waitUntil(() => {return getRelativeUrl() === 'home'}, 'Unable to load home page. ' + getRelativeUrl());
+};
 
 suite = function(description, func) {
     describe(description, function() {
