@@ -30,6 +30,10 @@ class HomePage extends AbstractPage {
     getBoard() {
         return new Board(this._browser);
     }
+
+    getAddStoryButton() {
+        return this.getChild('#addStoryButton');
+    }
 }
 
 module.exports = HomePage;
