@@ -25,6 +25,7 @@ editStoryModal = (function() {
         nameInput = $('<textarea>')
             .addClass('input form-control')
             .attr('placeholder', 'Story Name')
+			.attr('id', 'storyName')
             .appendTo(editDetails)
             .val(_storyJsonEdited.name)
             .on('input', function() {
@@ -34,6 +35,7 @@ editStoryModal = (function() {
 		pointsInput = $('<input>')
 			.addClass('input form-control')
 			.attr('placeholder', 'Story Points')
+            .attr('id', 'storyPoints')
 			.appendTo(editDetails)
 			.val(_storyJsonEdited.points)
 			.on('input', function() {
@@ -41,7 +43,10 @@ editStoryModal = (function() {
 			});
 
 		$('<h6>').text('Choose a team/board').appendTo(editDetails);
-		teamInput = $('<select>').attr('data-live-search', 'true').appendTo(editDetails);
+		teamInput = $('<select>')
+            .attr('data-live-search', 'true')
+            .attr('id', 'storyTeam')
+            .appendTo(editDetails);
 		loadTeamOptions(teamInput);
     	teamInput.val(teamId)
 			.selectpicker('refresh')
@@ -63,10 +68,12 @@ editStoryModal = (function() {
 
 		newAcceptanceCriteriaInput = $('<textarea>')
 			.addClass('input form-control')
+            .attr('id', 'addACTextarea')
 			.attr('placeholder', 'New criteria')
 			.appendTo(editDetails);
 		addCriteriaButton = $('<button>')
 			.addClass('btn btn-default')
+            .attr('id', 'addACButton')
 			.text('Add Criteria')
 			.appendTo(editDetails)
 			.click(function() {
