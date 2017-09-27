@@ -5,6 +5,7 @@ const ID = '#editModal';
 const STORY_NAME_INPUT_ID = '#storyName';
 const STORY_POINTS_INPUT_ID = '#storyPoints';
 const TEAM_SELECTOR = 'div.btn-group button.dropdown-toggle';
+const AC_SELECTOR = '#editCriteriaDiv div.criteriaNameDiv';
 const AC_TEXTAREA_ID = '#addACTextarea';
 const ADD_AC_BUTTON = '#addACButton';
 
@@ -27,6 +28,10 @@ class StoryModal extends AbstractModal {
 
     getTeamSelector() {
         return this.getChild(TEAM_SELECTOR);
+    }
+
+    getAC() {
+        return this.getChildren(AC_SELECTOR);
     }
 
     getACTextarea() {
