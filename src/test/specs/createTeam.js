@@ -4,7 +4,7 @@ const HomePage = require('../support/elements/pages/HomePage');
 const assert = require('chai').assert;
 
 let page;
-suite('User Creation', function () {
+suite('Team Creation', function () {
     before(function() {
         login('test', 'password');
         page = new HomePage(browser);
