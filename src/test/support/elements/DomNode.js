@@ -61,8 +61,14 @@ class DomNode{
         return this._browser.elementIdSelected(this.webElementId);
     }
 
+    clear() {
+        this._browser.elementIdClear(this.webElementId);
+        return this;
+    }
+
     sendKeys(keys) {
         this._browser.elementIdValue(this.webElementId, keys);
+        return this;
     }
 
     getText(unaltered) {
