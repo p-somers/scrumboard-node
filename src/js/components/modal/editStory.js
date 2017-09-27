@@ -78,6 +78,7 @@ editStoryModal = (function() {
 			.appendTo(editDetails)
 			.click(function() {
 				addCriteria(newAcceptanceCriteriaInput.val());
+                newAcceptanceCriteriaInput.val('');
 			});
 	}
 
