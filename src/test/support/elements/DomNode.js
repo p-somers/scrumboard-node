@@ -67,7 +67,7 @@ class DomNode{
     }
 
     sendKeys(keys) {
-        this._browser.elementIdValue(this.webElementId, keys);
+        this._browser.elementIdValue(this.webElementId, keys.toString());
         return this;
     }
 
