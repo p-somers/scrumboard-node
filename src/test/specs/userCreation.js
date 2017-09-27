@@ -1,6 +1,6 @@
 require('../support/context');
 
-const LoginPage = require('../support/pages/LoginPage');
+const LoginPage = require('../support/elements/pages/LoginPage');
 
 const assert = require('chai').assert;
 

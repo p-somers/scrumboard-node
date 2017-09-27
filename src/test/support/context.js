@@ -31,8 +31,8 @@ async function setup() {
     await require('../../../build/app')(testServerConfig).then(startServer);
 }
 
-const DomNode = require('./DomNode');
-const LoginPage = require('../support/pages/LoginPage');
+const DomNode = require('./elements/DomNode');
+const LoginPage = require('./elements/pages/LoginPage');
 
 
 // This fixes some issues running tests in Intellij

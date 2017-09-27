@@ -1,5 +1,5 @@
 const DomNode = require('../DomNode');
-const config = require('../../config.json');
+const config = require('../../../config.json');
 const baseUrl = config.baseUrl || 'http://localhost:' + config.port || 5001;
 
 class AbstractPage extends DomNode {
