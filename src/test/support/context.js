@@ -31,10 +31,6 @@ async function setup() {
     await require('../../../build/app')(testServerConfig).then(startServer);
 }
 
-const DomNode = require('./elements/DomNode');
-const LoginPage = require('./elements/pages/LoginPage');
-
-
 // This fixes some issues running tests in Intellij
 //     - the need to use the wdio module (and it's wrap function) since Intellij runs tests through mocha rather than through the wdio script
 //     - the increased timeout, which solves this issue
@@ -53,6 +49,7 @@ browser = wdio.getBrowser({
     logLevel: config.logLevel || 'silent',
 });
 
+const DomNode = require('./elements/DomNode');
 $ = function(selector) {
     let elements = browser.elements(selector);
     return DomNode.webElementsToDomNode(browser, elements);
@@ -83,6 +80,7 @@ waitUntil = function(conditionFunc, timeoutMessage) {
     browser.waitUntil(conditionFunc, WAITUNTIL_TIMEOUT, timeoutMessage, WAITUNTIL_INTERVAL);
 };
 
+const LoginPage = require('./elements/pages/LoginPage');
 login = function(username, password) {
     browser.url('/');
     let page = new LoginPage(browser);
