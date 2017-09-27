@@ -1,12 +1,14 @@
 const fs = require('fs');
+const path = require('path');
 const MongoClient = require('mongodb').MongoClient;
 const tables = ['users', 'companies', 'teams', 'burndowns', 'tasks', 'stories'];
-const dataDir = __dirname + '/data';
+const dataDir = path.resolve(__dirname, '..\\data');
 
 module.exports = async function(url) {
     let db = await MongoClient.connect(url);
 
     async function importFile(filename) {
+        console.log('importing ' + filename);
         return new Promise(resolve => {
             let table = filename.split('.')[0];
             let type = filename.split('.')[1];
@@ -15,6 +17,8 @@ module.exports = async function(url) {
                 db.collection(table, (error, collection) => {
                     collection.insertMany(data).then(resolve);
                 });
+            } else {
+                console.error('Error importing ' + filename + ': ' + table + ' not in list of importable tables');
             }
         });
     }
@@ -27,6 +31,7 @@ module.exports = async function(url) {
         },
         async prepareData() {
             return new Promise(resolve => {
+                console.log('importing files in ' + dataDir);
                 fs.readdir(dataDir, function(error, files) {
                     if (error) {
                         console.error('error reading test data directory', error);
