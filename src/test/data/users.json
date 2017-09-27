@@ -1,8 +1,9 @@
 [
   {
-    "username": "test_user",
-    "password": "password",
+    "username": "test",
+    "password": "$2a$10$E4d2LozK9/zWod705ZcXs.5dikyg.7QRef9UvAoOHUrAmvy10Qd6G",
     "name": "Test User",
-    "email": "test@poweradvocate.com"
+    "email": "test@poweradvocate.com",
+    "companyId": "company1"
   }
 ]

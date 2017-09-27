@@ -1,0 +1,20 @@
+[
+  {
+    "_id" : "team1",
+    "name" : "Team1",
+    "companyId" : "company1",
+    "people" : [
+      {
+        "name" : "TU",
+        "taskId" : "",
+        "storyId" : ""
+      }
+    ],
+    "columnNames" : [
+      "Not Started",
+      "In Progress",
+      "To Be Verified",
+      "Done"
+    ]
+  }
+]
