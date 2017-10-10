@@ -1,5 +1,5 @@
 const AbstractPage = require('./AbstractPage');
-const Board = require('../Board');
+const Board = require('../board/Board');
 
 class HomePage extends AbstractPage {
     constructor(_browser) {
@@ -29,10 +29,6 @@ class HomePage extends AbstractPage {
 
     getBoard() {
         return new Board(this._browser);
-    }
-
-    getAddStoryButton() {
-        return this.getChild('#addStoryButton');
     }
 }
 

@@ -8,6 +8,7 @@ const TEAM_SELECTOR = 'div.btn-group button.dropdown-toggle';
 const AC_SELECTOR = '#editCriteriaDiv div.criteriaNameDiv';
 const AC_TEXTAREA_ID = '#addACTextarea';
 const ADD_AC_BUTTON = '#addACButton';
+const SAVE_BUTTON_SELECTOR = 'button.modal-save'
 
 class StoryModal extends AbstractModal {
     constructor(_browser) {
@@ -40,6 +41,10 @@ class StoryModal extends AbstractModal {
 
     getAddACButton() {
         return this.getChild(ADD_AC_BUTTON);
+    }
+
+    getSaveButton() {
+        return this.getChild(SAVE_BUTTON_SELECTOR);
     }
 }
 

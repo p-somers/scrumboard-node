@@ -4,16 +4,17 @@ const AddStoryModal = require('../support/elements/modal/StoryModal');
 
 const assert = require('chai').assert;
 
-let page, addStoryModal;
 suite('Create Story', function () {
+    let board;
     before(function() {
         login('test', 'password');
-        page = new HomePage(browser);
+        board = new HomePage(browser).getBoard();
     });
 
     describe('when user creates a new story', function() {
+        let addStoryModal, board;
         before(function() {
-            page.getAddStoryButton().click();
+            board.getAddStoryButton().click();
             addStoryModal = new AddStoryModal(browser);
             addStoryModal.getStoryNameInput().clear().sendKeys('#1 New Story');
             addStoryModal.getStoryPointsInput().sendKeys(8);
@@ -40,7 +41,22 @@ suite('Create Story', function () {
         });
 
         describe('when the user saves the story', function() {
+            before(function() {
+                addStoryModal.getSaveButton().click();
+                browser.waitUntil(() => !addStoryModal.isDisplayed());
+            });
 
+            it('should hide the modal window', function() {
+                assert.isFalse(addStoryModal.isDisplayed());
+            });
+
+            it('should show the story in the table', () => {
+                let stories = board.getStories();
+                assert.isAtLeast(stories.length, 1);
+                let story = stories.pop();
+                assert.equal(story.getName(), '#1 New Story');
+                assert.equal(story.getStoryPoints(), '8');
+            });
         });
     });
 });

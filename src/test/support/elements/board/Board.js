@@ -1,16 +1,11 @@
-const DomNode = require('./DomNode');
+const DomNode = require('../DomNode');
+const Column = require('./Column');
+const Story = require('./Story');
 
 const ID = '#board';
 
-class Column extends DomNode {
-    constructor(obj) {
-        super(obj._browser, obj.webElementId);
-    }
-
-    getHeaderText() {
-        return this.getChild('h4').getText();
-    }
-}
+const STORY_SELECTOR = 'div.story-descr';
+const ADD_STORY_BUTTON_SELECTOR = '#addStoryButton';
 
 class Board extends DomNode {
     constructor(_browser) {
@@ -21,9 +16,19 @@ class Board extends DomNode {
         super(_browser, webElement.value.ELEMENT);
     }
 
+    getAddStoryButton() {
+        return this.getChild(ADD_STORY_BUTTON_SELECTOR);
+    }
+
     getColumnHeaders() {
         return this.getChildren('div.progressCol').map(column => {
             return new Column(column);
+        });
+    }
+
+    getStories() {
+        return this.getChildren(STORY_SELECTOR).map(story => {
+            return new Story(story)
         });
     }
 }
