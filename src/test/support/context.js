@@ -18,10 +18,15 @@ function startServer(scrumboard) {
     let socketio = scrumboard.socketio;
     let app = scrumboard.app;
     app.set('port', port);
-    let server = http.createServer(app);
-    socketio.attach(server);
     return new Promise((resolve) => {
-        server.listen(port, resolve);
+        if (typeof server !== 'undefined') {
+            socketio.attach(server);
+            resolve();
+        } else {
+            server = http.createServer(app);
+            socketio.attach(server);
+            server.listen(port, resolve);
+        }
     });
 }
 
@@ -54,22 +59,7 @@ $ = function(selector) {
     let elements = browser.elements(selector);
     return DomNode.webElementsToDomNode(browser, elements);
 }
-
-it = function(description, func) {
-    _it.call(mocha, description, wdio.wrap(func));
-};
-before = function(func) {
-    _before.call(mocha, wdio.wrap(func));
-};
-beforeEach = function(func) {
-    _beforeEach.call(mocha, wdio.wrap(func));
-};
-after = function(func) {
-    _after.call(mocha, wdio.wrap(func));
-};
-afterEach = function(func) {
-    _afterEach.call(mocha, wdio.wrap(func));
-};
+console.log("here");
 
 getRelativeUrl = function() {
     let url = browser.url().value;
@@ -89,8 +79,25 @@ login = function(username, password) {
     page.getSignInButton().click();
     waitUntil(() => {return getRelativeUrl() === 'home'}, 'Unable to load home page. ' + getRelativeUrl());
 };
-
 suite = function(description, func) {
+
+    // wrap globals in wdio.wrap calls. This needs to be done before each suite
+    it = function(description, func) {
+        _it.call(mocha, description, wdio.wrap(func));
+    };
+    before = function(func) {
+        _before.call(mocha, wdio.wrap(func));
+    };
+    beforeEach = function(func) {
+        _beforeEach.call(mocha, wdio.wrap(func));
+    };
+    after = function(func) {
+        _after.call(mocha, wdio.wrap(func));
+    };
+    afterEach = function(func) {
+        _afterEach.call(mocha, wdio.wrap(func));
+    };
+
     describe(description, function() {
         this.timeout(TEST_TIMEOUT);
 
