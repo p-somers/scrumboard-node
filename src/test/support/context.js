@@ -59,7 +59,6 @@ $ = function(selector) {
     let elements = browser.elements(selector);
     return DomNode.webElementsToDomNode(browser, elements);
 }
-console.log("here");
 
 getRelativeUrl = function() {
     let url = browser.url().value;
