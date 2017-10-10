@@ -1,0 +1,25 @@
+[
+  {
+    "_id" : "story1",
+    "name" : "Test Story",
+    "teamId" : "team1",
+    "companyId" : "company1",
+    "tasks" : [
+      {
+        "_id" : "story1_task1",
+        "name" : "task #1",
+        "statusCode" : 0,
+        "points" : "5",
+        "notes" : "test task"
+      }
+    ],
+    "statusCode" : "-1",
+    "points" : "5",
+    "acceptanceCriteria" : [
+      {
+        "name" : "test ac",
+        "isChecked" : "false"
+      }
+    ]
+  }
+]
