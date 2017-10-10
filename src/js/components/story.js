@@ -39,7 +39,6 @@ let story = function() {
         let storyPanels = $('<div>').addClass('col-xs-12 task-panels').appendTo(_storySticky);
         let leftPanel = $('<div>').addClass('taskpanel').appendTo(storyPanels);
         let middlePanel = $('<div>').addClass('taskpanel taskcenter story-sticky').appendTo(storyPanels);
-        middlePanel.text(_storyJson.name);
         var rightPanel = $('<div>').addClass('taskpanel').appendTo(storyPanels);
         var peopleRow = $('<div>').addClass('people-row').appendTo(_storySticky);
 
@@ -125,12 +124,11 @@ let story = function() {
     }
 
     function middlePanelInit($middlePanel) {
+        $('<span>').addClass('story-name').text(_storyJson.name).appendTo($middlePanel);
         let editCover = $("<div>").addClass('editCover show-on-hover').css('display', 'none').appendTo($middlePanel);
-        let editIcon = $("<span>").addClass('glyphicon glyphicon-pencil').appendTo(editCover);
-
         editCover.click(editStory);
-
-        let points = $('<div>').addClass('points').text(_storyJson.points).appendTo($middlePanel);
+        $("<span>").addClass('glyphicon glyphicon-pencil').appendTo(editCover);
+        $('<div>').addClass('points').text(_storyJson.points).appendTo($middlePanel);
 
     }
 
