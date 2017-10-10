@@ -124,6 +124,7 @@ let story = function() {
     }
 
     function middlePanelInit($middlePanel) {
+        $middlePanel.empty();
         $('<span>').addClass('story-name').text(_storyJson.name).appendTo($middlePanel);
         let editCover = $("<div>").addClass('editCover show-on-hover').css('display', 'none').appendTo($middlePanel);
         editCover.click(editStory);
@@ -231,9 +232,7 @@ let story = function() {
         $.ajax({
             type: 'PUT',
             url: _storyUrl + '/' + _storyJson._id + '/move',
-            data: {/*
-                teamId: _storyJson.teamId,
-                storyId: _storyJson._id,*/
+            data: {
                 newStatusCode: newStatusCode
             },
             dataType: "json",
@@ -357,7 +356,6 @@ let story = function() {
         },
         handleEdit: function(storyData) {
             _storyJson = storyData;
-            _storyRow.find('.story-sticky').text(_storyJson.name);
             middlePanelInit(_storyRow.find('.story-sticky'));
         },
         handleMove: function(newStatusCode) {
