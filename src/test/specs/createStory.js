@@ -12,7 +12,7 @@ suite('Create Story', function () {
     });
 
     describe('when user creates a new story', function() {
-        let addStoryModal, board;
+        let addStoryModal;
         before(function() {
             board.getAddStoryButton().click();
             addStoryModal = new AddStoryModal(browser);
