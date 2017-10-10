@@ -18,7 +18,7 @@ suite('Create Story', function () {
             addStoryModal = new AddStoryModal(browser);
             addStoryModal.getStoryNameInput().clear().sendKeys('#1 New Story');
             addStoryModal.getStoryPointsInput().sendKeys(8);
-            addStoryModal.getACTextarea().clear().sendKeys('New Acceptance Criteria');
+            addStoryModal.getACTextarea().clear().sendKeys('Acceptance Criteria');
             addStoryModal.getAddACButton().click();
         });
 
@@ -33,7 +33,7 @@ suite('Create Story', function () {
         it('should reflect the new acceptance criteria in the list', function() {
             let ac = addStoryModal.getAC();
             assert.equal(ac.length, 1);
-            assert.equal(ac[0].getText(), 'New Acceptance Criteria');
+            assert.equal(ac[0].getText(), 'Acceptance Criteria');
         });
 
         it('should clear the "New Criteria" box', function() {
