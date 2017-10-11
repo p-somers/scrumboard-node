@@ -4,7 +4,7 @@ const AddTaskModal = require('../support/elements/modal/Task');
 
 const assert = require('chai').assert;
 
-suite('Edit Story', function () {
+suite('Add Task', function () {
     let board;
     before(function() {
         login('test', 'password');
