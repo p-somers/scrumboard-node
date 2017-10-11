@@ -1,6 +1,6 @@
 require('../support/context');
 const HomePage = require('../support/elements/pages/HomePage');
-const EditStoryModal = require('../support/elements/modal/StoryModal');
+const EditStoryModal = require('../support/elements/modal/Story');
 
 const assert = require('chai').assert;
 

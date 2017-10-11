@@ -1,5 +1,5 @@
 const AbstractPage = require('./AbstractPage');
-const SignUpModal = require('../modal/SignUpModal');
+const SignUpModal = require('../modal/SignUp');
 
 class LoginPage extends AbstractPage {
     constructor(_browser) {
