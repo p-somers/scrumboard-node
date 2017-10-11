@@ -14,7 +14,7 @@ suite('Add Task', function () {
     describe('when a user clicks the "add task" button', function() {
         let addTaskModal, story, task;
         before(function() {
-            story = board.getStoryByName('Test Task');
+            story = board.getStoryByName('Test Story');
             story.getAddTaskButton().click();
             addTaskModal = new AddTaskModal(browser);
             addTaskModal.getTaskNameInput().clear().sendKeys('New Test Task');
