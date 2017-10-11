@@ -4,7 +4,7 @@ const Story = require('./Story');
 
 const ID = '#board';
 
-const STORY_SELECTOR = 'div.row.story';
+const STORIES_SELECTOR = 'div.row.story';
 const ADD_STORY_BUTTON_SELECTOR = '#addStoryButton';
 const COLUMN_HEADERS_SELECTOR = 'div.progressCol';
 
@@ -28,7 +28,7 @@ class Board extends DomNode {
     }
 
     getStories() {
-        return this.getChildren(STORY_SELECTOR).map(story => {
+        return this.getChildren(STORIES_SELECTOR).map(story => {
             return new Story(story)
         });
     }
