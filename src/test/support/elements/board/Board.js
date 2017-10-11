@@ -4,8 +4,9 @@ const Story = require('./Story');
 
 const ID = '#board';
 
-const STORY_SELECTOR = 'div.story-descr';
+const STORY_SELECTOR = 'div.row.story';
 const ADD_STORY_BUTTON_SELECTOR = '#addStoryButton';
+const COLUMN_HEADERS_SELECTOR = 'div.progressCol';
 
 class Board extends DomNode {
     constructor(_browser) {
@@ -21,7 +22,7 @@ class Board extends DomNode {
     }
 
     getColumnHeaders() {
-        return this.getChildren('div.progressCol').map(column => {
+        return this.getChildren(COLUMN_HEADERS_SELECTOR).map(column => {
             return new Column(column);
         });
     }
@@ -29,6 +30,12 @@ class Board extends DomNode {
     getStories() {
         return this.getChildren(STORY_SELECTOR).map(story => {
             return new Story(story)
+        });
+    }
+
+    getStoryByName(name) {
+        return this.getStories().find(story => {
+            return story.getName() === name;
         });
     }
 }
