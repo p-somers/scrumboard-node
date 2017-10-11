@@ -79,7 +79,7 @@ let task = function() {
         if(_taskJson.name) {
         	taskName = _taskJson.name;
         }
-        $('<span>').addClass('name').text(taskName).appendTo($middlePanel);
+        $('<span>').addClass('task-name').text(taskName).appendTo($middlePanel);
 
 		editCover.click(editTask);
 
