@@ -16,11 +16,6 @@ let task = function() {
 		let taskPanels = $('<div>').addClass('col-xs-12 task-panels').appendTo(_taskDiv);
 		let leftPanel = $('<div>').addClass('taskpanel').appendTo(taskPanels);
 		let middlePanel = $('<div>').addClass('taskpanel taskcenter').appendTo(taskPanels);
-		if(_taskJson.name) {
-			middlePanel.text(_taskJson.name);
-		} else {
-			middlePanel.text('New Task');
-		}
 		let rightPanel = $('<div>').addClass('taskpanel').appendTo(taskPanels);
 		$('<br>').appendTo(_taskDiv);
 		let peopleRow = $('<div>').addClass('people-row').appendTo(_taskDiv);
@@ -77,8 +72,14 @@ let task = function() {
 	}
 
 	function middlePanelInit($middlePanel) {
+	    $middlePanel.empty();
 		let editCover = $("<div>").addClass('editCover show-on-hover').css('display', 'none').appendTo($middlePanel);
 		let editIcon = $("<span>").addClass('glyphicon glyphicon-pencil').appendTo(editCover);
+		let taskName = 'New Task';
+        if(_taskJson.name) {
+        	taskName = _taskJson.name;
+        }
+        $('<span>').addClass('name').text(taskName).appendTo($middlePanel);
 
 		editCover.click(editTask);
 
@@ -299,7 +300,6 @@ let task = function() {
 		handleEdit: function(taskData) {
 			_taskJson = taskData;
 			let middlePanel = _taskDiv.children('.task-panels').children('.taskcenter');
-			middlePanel.text(_taskJson.name);
 			middlePanelInit(middlePanel);
 		},
 		/** Asks the server to move (change the status code) the task **/
