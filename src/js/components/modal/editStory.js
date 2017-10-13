@@ -10,6 +10,7 @@ editStoryModal = (function() {
         let editModal = $('#editModal'),
             modalTitle = editModal.find('.modal-title'),
             modalBody = editModal.find('.modal-body'),
+			isNewStory = storyJson ? false : true,
 			editDetails,
 			nameInput,
 			pointsInput,
@@ -17,7 +18,7 @@ editStoryModal = (function() {
             newAcceptanceCriteriaInput,
             addCriteriaButton;
 
-		modalTitle.text(storyJson ? 'Edit Story' : 'Add Story');
+		modalTitle.text(isNewStory ? 'Add Story' : 'Edit Story' );
 
 		_storyJsonEdited = storyJson ? storyJson : {name: "New Story", points: "", teamId: teamId, tasks: []};
 		editDetails = $('<div>').attr('id', 'editDetails').appendTo(modalBody);
@@ -80,6 +81,25 @@ editStoryModal = (function() {
 				addCriteria(newAcceptanceCriteriaInput.val());
                 newAcceptanceCriteriaInput.val('');
 			});
+
+		if (isNewStory && false) {
+		    // not ready yet
+            $('<h6>Default tasks:</h6>').appendTo(editDetails);
+            let defaultTasksDiv = $('<div class="form-control" id="defaultTasks">');
+		    function addDefaultTaskCB(id, label) {
+		        $(`<div class="form-check input">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="${id}" checked>
+                        ${label}
+                      </label>
+                    </div>`).appendTo(defaultTasksDiv);
+            }
+            addDefaultTaskCB('cbBrowserTesting', 'Browser testing - Chrome, IE, Edge');
+            addDefaultTaskCB('cbCodeReview', 'Code Review');
+            addDefaultTaskCB('cbFrontEnd', 'Front End');
+            addDefaultTaskCB('cbBackEnd', 'Back End');
+            editDetails.append(defaultTasksDiv);
+        }
 	}
 
 	function addCriteria(criteriaName, isChecked) {
@@ -128,6 +148,8 @@ editStoryModal = (function() {
 					isChecked: row.children('.criteriaCheckbox').get()[0].checked
 				});
 			}
+			let defaultTasks = $('#defaultTasks').find('input.form-check-input').toArray().filter(cb => cb.checked).map(cb => cb.id);
+			_storyJsonEdited.defaultTasks = defaultTasks;
 			_storyJsonEdited.acceptanceCriteria = acceptanceCriteria;
             editModal.modal('hide');
 			callback(_storyJsonEdited);

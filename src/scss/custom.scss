@@ -143,6 +143,10 @@ body {
 	margin:0 auto;
 	margin-bottom: 15px;
 	max-width:100%;
+
+	&#defaultTasks {
+		height: auto;
+	}
 }
 
 #addStoryButton {
