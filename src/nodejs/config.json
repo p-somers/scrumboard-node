@@ -1,4 +1,5 @@
 {
   "mongoUrl": "mongodb://localhost",
-  "logLevel": "verbose"
+  "logLevel": "verbose",
+  "port": "5000"
 }

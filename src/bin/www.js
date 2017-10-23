@@ -15,7 +15,7 @@ require('../app')().then(scrumboard => {
      * Get port from environment and store in Express.
      */
 
-    port = normalizePort(process.env.PORT || '5000');
+    port = normalizePort(scrumboard.port || '5000');
     app.set('port', port);
 
     /**
