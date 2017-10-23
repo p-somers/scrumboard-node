@@ -10,9 +10,11 @@ const config = require('./config');
 let socketio = require('socket.io')();
 let socketInit = require('./socketInit');
 
-let requiresLoginRedirect, loggedInRedirect;
+let requiresLoginRedirect, loggedInRedirect, googleAuthCollection;
 async function waitForPersistence() {
     let helpers = await require('./controllers/helpers')();
+    let collections = await require('./modules/collections')();
+    googleAuthCollection = collections.googleAuth;
 
     requiresLoginRedirect = helpers.requiresLoginRedirect;
     loggedInRedirect = helpers.loggedInRedirect;
@@ -55,7 +57,9 @@ module.exports = async function(_config) {
     }
 
     app.get('/home', requiresLoginRedirect, function (req, res) {
-        res.render('pages/teamhome');
+        googleAuthCollection;
+        debugger;
+        res.render('pages/teamhome', {hasGoogleAuth: true});
     });
 
     socketio.use(function (socket, next) {
