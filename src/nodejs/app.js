@@ -70,6 +70,7 @@ module.exports = async function(_config) {
 
     return {
         app: app,
+        port: config.get('port'),
         socketio: socketio
     };
 };
