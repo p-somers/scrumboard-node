@@ -22,7 +22,10 @@
     <div id="sidebar" style="display: none;">
     	<span id="sidebar-close" class="glyphicon glyphicon-remove"></span>
     	<a class="sidebar-item" href="/logOut">Log Out</a>
+		<a display="none" class="sidebar-item" id="importFromSheets" data-toggle="modal" data-target="#importStoriesModal">Import From Google Sheets</a>
     </div>
+
+	<%include ../modals/importStories.ejs%>
 
 	<div id="select-div">
 	</div>

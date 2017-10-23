@@ -50,7 +50,7 @@ body {
 	background-color: rgba(0, 0, 0, 0.9);
 	top: 0;
 	left: 0;
-	z-index: 999999999;
+	z-index: 100;
 	padding-top: 50px;
 
 	#sidebar-close {
@@ -68,8 +68,6 @@ body {
 		text-align: center;
 		font-size: 24px;
 		display: block;
-		max-width: 200px;
-
 	}
 }
 
@@ -452,4 +450,8 @@ body {
 
 .ui-draggable-dragging {
 	z-index: 10;
+}
+
+#importStoriesModal .btn {
+	display: initial;
 }
