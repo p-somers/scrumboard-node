@@ -57,9 +57,14 @@ module.exports = async function(_config) {
     }
 
     app.get('/home', requiresLoginRedirect, function (req, res) {
-        googleAuthCollection;
-        debugger;
-        res.render('pages/teamhome', {hasGoogleAuth: true});
+        // TODO: refactor this out when creating the dao and service layers
+        googleAuthCollection.find(
+            {'companyId': req.session.companyId},
+            function (err, results) {
+                let hasGoogleAuth = results.length > 0;
+                res.render('pages/teamhome', {hasGoogleAuth: hasGoogleAuth});
+            }
+        );
     });
 
     socketio.use(function (socket, next) {
