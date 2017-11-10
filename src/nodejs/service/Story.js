@@ -38,6 +38,13 @@ class Stories extends Service {
         return this.storyDao.getStories(teamId, companyId);
     }
 
+    setStyle(storyId, width, height) {
+        return this.storyDao.updateOne(storyId, {
+            'width': width,
+            'height': height
+        });
+    }
+
     deleteStory(storyId) {
         return this.storyDao.deleteById(storyId);
     }

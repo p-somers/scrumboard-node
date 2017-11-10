@@ -1,3 +1,20 @@
+function isLoggedIn(req) {
+    //TODO: add actual check against db
+    if(req.session.userId && req.session.companyId) {
+        return true;
+    }
+    return false;
+}
+
+function requiresLogin(req, res, next) {
+    if (isLoggedIn(req)) {
+        next();
+    } else {
+        req.session.error = 'Access denied!';
+        res.json({ type: "error", error: "This requires login."});
+    }
+}
+
 class Router {
     constructor(_controller) {
         this.controller = _controller;
@@ -11,11 +28,11 @@ class Router {
      * @param paramMappingFunc
      * @param permissionChecks An array of string names that map to functions in the PermissionsController
      */
-    addRoute(expressRouter, method, path, controllerFuncName, paramMappingFunc, permissionChecks) {
+    addRoute(expressRouter, requiresLogin, method, path, controllerFuncName, paramMappingFunc, permissionChecks) {
         let router = this;
-        let permissionCheckFns = [];
+        let beforeFns = requiresLogin ? [requiresLogin] : [];
         if (Array.isArray(permissionChecks)) {
-            permissionCheckFns = permissionChecks.map(fnName => {
+            beforeFns = permissionChecks.map(fnName => {
                 if (typeof router.permissionsController[fnName] === 'function') {
                     return (req, res, next) => {
                         router.permissionsController[fnName](req, res, next);
@@ -25,7 +42,7 @@ class Router {
                 }
             });
         }
-        expressRouter[method](path, ...permissionCheckFns, this.controllerHandler(controllerFuncName, paramMappingFunc));
+        expressRouter[method](path, ...beforeFns, this.controllerHandler(controllerFuncName, paramMappingFunc));
     }
 
     /**

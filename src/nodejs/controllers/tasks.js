@@ -65,7 +65,7 @@ module.exports = async function(socketio) {
             if (results.length > 0) {
                 let team = results[0];
                 if (team.companyId === req.session.companyId) {
-                    storiesCollection.updateOne(
+                    stories.updateOne(
                         {'_id': storyId, 'teamId': teamId},
                         {
                             $pull: {

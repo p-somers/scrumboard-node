@@ -24,10 +24,15 @@ class Story extends Controller {
     }
 
     async getStories(teamId, companyId) {
-        return await this.storyService.getStories(teamId, companyId);
+        let results = await this.storyService.getStories(teamId, companyId);
+        return {
+            stories: results
+        }
     }
 
-    async changeStyling(teamId, storyId, width, height) {
+    async setStyle(teamId, storyId, width, height) {
+        await this.storyService.setStyle(storyId, width, height);
+        this.socketIO.sockets.in(teamId).emit('update story style', {storyId: storyId, height: height, width: width});
 
     }
 
