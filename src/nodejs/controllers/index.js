@@ -7,13 +7,11 @@ module.exports = async function() {
     const burndown = await require('./burndown').apply(this, arguments);
     const people = await require('./people').apply(this, arguments);
     const auth = await require('./auth').apply(this, arguments);
-    const google = await require('./google').apply(this, arguments);
 
     stories.use('/:storyId/tasks', tasks);
-    teams.use('/:teamId/stories', stories);
+    //teams.use('/:teamId/stories', stories);
     teams.use('/:teamId/burndown', burndown);
     teams.use('/:teamId/people', people);
-    teams.use('/:teamId/google', google);
     routes.use('/teams', teams);
     routes.use(auth);
 

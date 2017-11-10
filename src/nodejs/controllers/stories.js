@@ -15,7 +15,7 @@ async function waitForPersistence() {
 module.exports = async function(socketio) {
     await waitForPersistence();
 
-    routes.post('/', requiresLogin, function(req, res) {
+    /*routes.post('/', requiresLogin, function(req, res) {
         let teamId = req.params.teamId;
         let name = req.body.name;
         let points = req.body.points;
@@ -43,9 +43,9 @@ module.exports = async function(socketio) {
                 return res.json({ type: "error", error: "This team does not exist."});
             }
         });
-    });
+    });*/
 
-    routes.put('/:storyId/move', requiresLogin, function (req, res) {
+    /*routes.put('/:storyId/move', requiresLogin, function (req, res) {
         let teamId = req.params.teamId;
         let storyId = req.params.storyId;
         let newStatusCode = req.body.newStatusCode;
@@ -83,8 +83,8 @@ module.exports = async function(socketio) {
             }
         });
 
-    });
-
+    });*/
+/*
     routes.put('/:storyId/edit', requiresLogin, function (req, res) {
 
         let teamId = req.body.teamId;
@@ -133,7 +133,8 @@ module.exports = async function(socketio) {
                 return res.json({type: "error", error: "This team does not exist."});
             }
         });
-    });
+    });*/
+/*
 
     routes.delete('/:storyId', requiresLogin, function (req, res) {
         let teamId = req.params.teamId;
@@ -163,6 +164,8 @@ module.exports = async function(socketio) {
             }
         });
     });
+*/
+/*
 
     routes.get('/', requiresLogin, function (req, res, next) {
         let teamId = req.params.teamId;
@@ -186,6 +189,7 @@ module.exports = async function(socketio) {
         });
 
     });
+*/
 
     routes.patch('/:storyId/styling', requiresLogin, function (req, res) {
         let teamId = req.params.teamId;

@@ -5,18 +5,14 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const morgan = require('morgan');
-const config = require('./config');
+const config = require('config');
 
 let socketio = require('socket.io')();
 let socketInit = require('./socketInit');
 
-let requiresLoginRedirect, loggedInRedirect, googleAuthCollection;
+let loggedInRedirect;
 async function waitForPersistence() {
     let helpers = await require('./controllers/helpers')();
-    let collections = await require('./modules/collections')();
-    googleAuthCollection = collections.googleAuth;
-
-    requiresLoginRedirect = helpers.requiresLoginRedirect;
     loggedInRedirect = helpers.loggedInRedirect;
 }
 
@@ -49,23 +45,14 @@ module.exports = async function(_config) {
 
     try {
         const routes = await require('./controllers')(socketio);
+        const moreRoutes = await require('./router').prepareRoutes(socketio);
         app.use('/', routes);
+        app.use('/', moreRoutes);
     }
     catch(ex) {
         console.error(ex);
         process.exit(-1);
     }
-
-    app.get('/home', requiresLoginRedirect, function (req, res) {
-        // TODO: refactor this out when creating the dao and service layers
-        googleAuthCollection.find(
-            {'companyId': req.session.companyId},
-            function (err, results) {
-                let hasGoogleAuth = results.length > 0;
-                res.render('pages/teamhome', {hasGoogleAuth: hasGoogleAuth});
-            }
-        );
-    });
 
     socketio.use(function (socket, next) {
         sessionMiddleware(socket.request, socket.request.res, next);
@@ -73,9 +60,9 @@ module.exports = async function(_config) {
 
     socketio.on('connection', socketInit);
 
-    app.get('/', loggedInRedirect, function (req, res) {
+    /*app.get('/', loggedInRedirect, function (req, res) {
         res.render('pages/index');
-    });
+    });*/
 
     return {
         app: app,
