@@ -58,3 +58,6 @@ git checkout master
 git merge upstream/master
 git push origin master
 ```
+
+## Google sheets integration
+You need to generate your own client_secret.json from Google and put it in src/nodejs/google
