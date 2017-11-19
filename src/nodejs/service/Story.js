@@ -13,11 +13,11 @@ class Stories extends Service {
         this.teamDao = _teamDao;
     }
 
-    async addStory(teamId, companyId, name, points, acceptanceCriteria) {
+    addStory(teamId, companyId, name, points, acceptanceCriteria) {
         return this.storyDao.addStory(teamId, companyId, name, [], points, acceptanceCriteria);
     }
 
-    async editStory(storyId, _newValues) {
+    editStory(storyId, _newValues) {
         let newValues = {};
         Stories.PROPERTIES.forEach(prop => {
             if (_newValues[prop]) {
