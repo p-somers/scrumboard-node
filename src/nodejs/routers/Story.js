@@ -2,10 +2,6 @@ const Router = require('./Router');
 const ExpressRouter = require('express').Router;
 
 class Story extends Router {
-    constructor(controller) {
-        super(controller);
-    }
-
     get expressRouter() {
         let expressRouter = ExpressRouter({mergeParams: true});
         let addRoute = this.addRoute.bind(this, expressRouter, true);

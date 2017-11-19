@@ -16,10 +16,6 @@ function requiresLogin(req, res, next) {
 }
 
 class Router {
-    constructor(_controller) {
-        this.controller = _controller;
-    }
-
     /**
      * Registers a controller function with a route in this router, along with optional permission checks
      * @param method The REST method for the route
