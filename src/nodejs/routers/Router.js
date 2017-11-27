@@ -47,6 +47,9 @@ class Router {
      */
     controllerHandler(fnName, paramMappingFunc) {
         let router = this;
+        if (typeof router.controller[fnName] !== 'function') {
+            throw new Error(`${this.constructor.name} Controller has no function named ${fnName}`);
+        }
         return async (req, res, next) => {
             let boundParams = paramMappingFunc ? paramMappingFunc(req, res, next) : [];
             if (!Array.isArray(boundParams)) {
