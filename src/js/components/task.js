@@ -218,12 +218,7 @@ let task = function() {
 	function removeTask() {
 		$.ajax({
 		    type: 'DELETE',
-		    url: _taskUrl + '/delete',
-		    /*data: {
-		    	teamId: _teamId,
-		        storyId: _storyId,
-		        taskId: _taskJson._id
-		    },*/
+		    url: _taskUrl,
 		    dataType: "json",
 		    contentType: "application/x-www-form-urlencoded"
 

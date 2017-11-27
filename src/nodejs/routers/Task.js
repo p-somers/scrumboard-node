@@ -11,28 +11,28 @@ class Task extends Router {
         let addRoute = this.addRoute.bind(this, expressRouter, true);
 
         let addTaskParamMappingFunc = req => [req.params.teamId, req.params.storyId, req.body.name, req.body.points, req.body.notes, req.session.companyId];
-        addRoute('post', '/', 'addTask', addTaskParamMappingFunc, ['checkTeamCompany', 'storyBelongsToTeam']);
+        addRoute('post', '/', 'addTask', addTaskParamMappingFunc, ['checkTeamCompany', 'checkStoryTeam']);
 
         let deleteTaskParamMappingFunc = req => [req.params.teamId, req.params.storyId, req.params.taskId, req.session.companyId];
-        addRoute('delete', '/:taskId', 'deleteTask', deleteTaskParamMappingFunc, ['checkTeamCompany', 'storyBelongsToTeam']);
+        addRoute('delete', '/:taskId', 'deleteTask', deleteTaskParamMappingFunc, ['checkTeamCompany', 'checkStoryTeam']);
 
         let moveTaskParamMappingFunc = req => [req.params.teamId, req.params.storyId, req.params.taskId, req.body.newStatusCode, req.session.companyId];
-        addRoute('patch', '/:taskId/move', 'editTask', moveTaskParamMappingFunc, ['checkTeamCompany', 'storyBelongsToTeam']);
+        addRoute('patch', '/:taskId/move', 'moveTask', moveTaskParamMappingFunc, ['checkTeamCompany', 'checkStoryTeam']);
 
         let editTaskParamMappingFunc = req => [
             req.params.teamId,
             req.params.storyId,
             req.params.taskId,
-            req.params.newTaskJson.statusCode,
-            req.params.newTaskJson.name,
-            req.params.newTaskJson.points,
-            req.params.newTaskJson.notes,
+            req.body.newTaskJson.statusCode,
+            req.body.newTaskJson.name,
+            req.body.newTaskJson.points,
+            req.body.newTaskJson.notes,
             req.session.companyId
         ];
-        addRoute('patch', '/:taskId', 'editTask', editTaskParamMappingFunc, ['checkTeamCompany', 'storyBelongsToTeam']);
+        addRoute('patch', '/:taskId', 'editTask', editTaskParamMappingFunc, ['checkTeamCompany', 'checkStoryTeam']);
 
         let setStyleParamMappingFunc = req => [req.params.teamId, req.params.storyId, req.params.taskId, req.body.width, req.body.height, req.session.companyId];
-        addRoute('put', '/:taskId/styling', 'setStyle', setStyleParamMappingFunc, ['checkTeamCompany', 'storyBelongsToTeam']);
+        addRoute('put', '/:taskId/styling', 'setStyle', setStyleParamMappingFunc, ['checkTeamCompany', 'checkStoryTeam']);
 
         return expressRouter;
     }

@@ -12,7 +12,7 @@
                 <% if (hasGoogleAuth) {%>
                 has auth
                 <% } else { %>
-                no auth
+                <a href="<%= googleAuthUrl%>" >Authorize Google Sheets</a>
                 <% } %>
             </div>
             <div class="modal-footer">

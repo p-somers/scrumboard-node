@@ -1,5 +1,11 @@
 const Service = require('./Service');
 
+function setIfDefined(dest, propName, propVal) {
+    if (propVal !== undefined) {
+        dest[propName] = propVal;
+    }
+}
+
 class Stories extends Service {
     static get PROPERTIES() {
         return ['name', 'tasks', 'acceptanceCriteria', 'points'];
@@ -47,6 +53,26 @@ class Stories extends Service {
 
     deleteStory(storyId) {
         return this.storyDao.deleteById(storyId);
+    }
+
+    addTask(storyId, name, points, notes) {
+        let statusCode = 0;
+        return this.storyDao.addTask(storyId, name, points, notes, statusCode);
+    }
+
+    editTask(storyId, taskId, statusCode, name, points, notes, width, height) {
+        let newValues = {};
+        setIfDefined(newValues, 'tasks.$.statusCode', statusCode);
+        setIfDefined(newValues, 'tasks.$.name', name);
+        setIfDefined(newValues, 'tasks.$.points', points);
+        setIfDefined(newValues, 'tasks.$.notes', notes);
+        setIfDefined(newValues, 'tasks.$.width', width);
+        setIfDefined(newValues, 'tasks.$.height', height);
+        return this.storyDao.updateTask(storyId, taskId, newValues);
+    }
+
+    deleteTask(storyId, taskId) {
+        return this.storyDao.deleteTask(storyId, taskId);
     }
 }
 

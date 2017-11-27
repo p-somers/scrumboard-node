@@ -193,9 +193,7 @@ let story = function() {
               $.ajax({
                          type: 'PATCH',
                          url: _storyUrl + '/' + _storyJson._id + '/styling',
-                         data: {/*
-                             teamId: _storyJson.teamId,
-                             storyId: _storyJson._id,*/
+                         data: {
                              width: ui.size.width,
                              height: ui.size.height
                          },

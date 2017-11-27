@@ -21,6 +21,52 @@ class Story extends DaoObj {
         return result.ops[0];
     }
 
+    async addTask(storyId, name, points, notes, statusCode) {
+        let taskId = uuidV4();
+        let results = await this.collection.updateOne(
+            {
+                '_id': storyId
+            },
+            {
+                '$push': {
+                    'tasks': {
+                        '_id': taskId,
+                        'name': name,
+                        'points': points,
+                        'notes': notes,
+                        'statusCode': statusCode
+                    }
+                }
+            }
+        );
+        return taskId;
+    }
+
+    async deleteTask(storyId, taskId) {
+        let result = await this.collection.updateOne(
+            {
+                '_id': storyId
+            },
+            {
+                '$pull': {
+                    'tasks': {'_id': taskId}
+                }
+            }
+        );
+    }
+
+    updateTask(storyId, taskId, updateValues) {
+        return this.collection.updateOne(
+            {
+                '_id': storyId,
+                'tasks._id': taskId
+            },
+            {
+                '$set': updateValues
+            }
+        );
+    }
+
     getStories(teamId, companyId) {
         return this.find(
             {

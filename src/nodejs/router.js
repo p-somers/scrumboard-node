@@ -10,8 +10,10 @@ const DefaultController = require('./controller/Default');
 const GoogleAuthController = require('./controller/GoogleAuth');
 const PermissionsController = require('./controller/Permissions');
 const StoryController = require('./controller/Story');
+const TaskController = require('./controller/Task');
 
 const StoryRouter = require('./routers/Story');
+const TaskRouter = require('./routers/Task');
 
 function requiresLoginRedirect(req, res, next) {
     if (isLoggedIn(req)) {
@@ -95,22 +97,27 @@ module.exports.prepareRoutes = async function(socketio) {
     storyController.setSocketIO(socketio);
     storyController.setStoryService(storyService);
 
+    let taskController = new TaskController();
+    taskController.setSocketIO(socketio);
+    taskController.setStoryService(storyService);
+
     // Routers ----------------------------------------------------------------
-    let storyRouter = new StoryRouter(storyController);
+    let storyRouter = new StoryRouter();
     storyRouter.setPermissionsController(permissionsController);
     storyRouter.setController(storyController);
+
+    let taskRouter = new TaskRouter(taskController);
+    taskRouter.setPermissionsController(permissionsController);
+    taskRouter.setController(taskController);
 
     // Routes -----------------------------------------------------------------
     routes.get('/home', requiresLoginRedirect, c(defaultController, defaultController.home, (req, res) => [req.session.userId, res]));
     routes.get('/google/saveAuth', c(googleAuthController, googleAuthController.saveAuth, (req, res) => [req.session.userId, req.query.code, res]));
 
-    routes.get('/', loggedInRedirect, function (req, res) {
-        res.render('pages/index');
-    });
+    routes.get('/', loggedInRedirect, (req, res) => res.render('pages/index'));
 
     routes.use('/teams/:teamId/stories', storyRouter.expressRouter);
+    routes.use('/teams/:teamId/stories/:storyId/tasks', taskRouter.expressRouter);
 
-    //routes.post('/teams/:teamId/stories', requiresLogin, c(storyController, storyController.addStory, (req, res) => [req.params.teamId, req.session.companyId, req.body.name, req.body.points, req.body.acceptanceCriteria, res]));
-    //routes.put('/')
     return routes;
 };
