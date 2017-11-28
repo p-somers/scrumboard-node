@@ -65,6 +65,25 @@ class DaoObj {
         )
     }
 
+    findOneAndUpdate(filter, operation) {
+        return this.collection.findOneAndUpdate(
+            filter,
+            operation,
+            {
+                'returnOriginal': false
+            }
+        );
+    }
+
+    findOneByIdAndUpdate(id, operation) {
+        return this.collection.findOneAndUpdate(
+            {
+                '_id': id
+            },
+            operation
+        );
+    }
+
     insert(objects) {
         return this.collection.insert(objects);
     }

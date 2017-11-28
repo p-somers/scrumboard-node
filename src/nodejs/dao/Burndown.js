@@ -50,15 +50,12 @@ class Burndown extends DaoObj {
         );
     }
 
-    updateBurndown(teamId, op) {
-        return this.collection.findOneAndUpdate(
+    updateBurndown(teamId, operation) {
+        return this.findOneAndUpdate(
             {
                 'teamId': teamId,
             },
-            op,
-            {
-                'returnOriginal': false
-            }
+            operation
         );
     }
 }
