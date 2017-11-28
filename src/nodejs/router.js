@@ -2,16 +2,19 @@ const routes = require('express').Router();
 
 const daoModule = require('./dao');
 
+const BurndownService = require('./service/Burndown');
 const GoogleAuthService = require('./service/GoogleAuth');
 const PermissionsService = require('./service/Permission');
 const StoryService = require('./service/Story');
 
+const BurndownController = require('./controller/Burndown');
 const DefaultController = require('./controller/Default');
 const GoogleAuthController = require('./controller/GoogleAuth');
 const PermissionsController = require('./controller/Permissions');
 const StoryController = require('./controller/Story');
 const TaskController = require('./controller/Task');
 
+const BurndownRouter = require('./routers/Burndown');
 const StoryRouter = require('./routers/Story');
 const TaskRouter = require('./routers/Task');
 
@@ -83,7 +86,15 @@ module.exports.prepareRoutes = async function(socketio) {
     storyService.setStoryDao(daos.storyDao);
     storyService.setTeamDao(daos.teamDao);
 
+    let burndownService = new BurndownService();
+    burndownService.setBurndownDao(daos.burndownDao);
+    burndownService.setStoryService(storyService);
+
     // Controllers ------------------------------------------------------------
+    let burndownController = new BurndownController();
+    burndownController.setBurndownService(burndownService);
+    burndownController.setSocketIO(socketio);
+
     let defaultController = new DefaultController();
     defaultController.setGoogleAuthService(googleAuthService);
 
@@ -102,6 +113,10 @@ module.exports.prepareRoutes = async function(socketio) {
     taskController.setStoryService(storyService);
 
     // Routers ----------------------------------------------------------------
+    let burndownRouter = new BurndownRouter();
+    burndownRouter.setPermissionsController(permissionsController);
+    burndownRouter.setController(burndownController);
+
     let storyRouter = new StoryRouter();
     storyRouter.setPermissionsController(permissionsController);
     storyRouter.setController(storyController);
@@ -118,6 +133,7 @@ module.exports.prepareRoutes = async function(socketio) {
 
     routes.use('/teams/:teamId/stories', storyRouter.expressRouter);
     routes.use('/teams/:teamId/stories/:storyId/tasks', taskRouter.expressRouter);
+    routes.use('/teams/:teamId/burndown', burndownRouter.expressRouter);
 
     return routes;
 };

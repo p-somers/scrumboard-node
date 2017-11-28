@@ -71,6 +71,39 @@ class Stories extends Service {
         return this.storyDao.updateTask(storyId, taskId, newValues);
     }
 
+    async hoursAndPointsRemaining(teamId) {
+        let team = await this.teamDao.findById(teamId);
+        let lastColumnIndex = team.columnNames.length - 1;
+        let storiesInProgress = await this.storyDao.find(
+            {
+                'teamId': teamId,
+                'statusCode': {
+                    '$ne': lastColumnIndex.toString()
+                }
+            }
+        );
+
+        function addPoints(currentSum, item) {
+            let status = parseInt(item.statusCode);
+            if (status !== lastColumnIndex) {
+                let num = parseFloat(item.points);
+                if (!isNaN(num)) {
+                    currentSum += num;
+                }
+            }
+            return currentSum;
+        }
+
+        let points = 0;
+        let hours = 0;
+        storiesInProgress.forEach(story => {
+            points += addPoints(points, story);
+            hours = story.tasks.reduce(addPoints, hours);
+        });
+
+        return {hours, points};
+    }
+
     deleteTask(storyId, taskId) {
         return this.storyDao.deleteTask(storyId, taskId);
     }

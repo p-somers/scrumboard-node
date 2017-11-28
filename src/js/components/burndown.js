@@ -8,9 +8,6 @@ burndown = (function() {
 		$.ajax({
 		    type: 'GET',
 		    url: _burdownUrl,
-		    /*data: {
-		        teamId: _teamId
-		    },*/
 		    dataType: "json",
 		    contentType: "application/x-www-form-urlencoded"
 
