@@ -76,7 +76,7 @@ class DaoObj {
     }
 
     findOneByIdAndUpdate(id, operation) {
-        return this.collection.findOneAndUpdate(
+        return this.findOneAndUpdate(
             {
                 '_id': id
             },

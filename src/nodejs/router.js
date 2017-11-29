@@ -5,16 +5,19 @@ const daoModule = require('./dao');
 const BurndownService = require('./service/Burndown');
 const GoogleAuthService = require('./service/GoogleAuth');
 const PermissionsService = require('./service/Permission');
+const PersonService = require('./service/Person');
 const StoryService = require('./service/Story');
 
 const BurndownController = require('./controller/Burndown');
 const DefaultController = require('./controller/Default');
 const GoogleAuthController = require('./controller/GoogleAuth');
 const PermissionsController = require('./controller/Permissions');
+const PersonController = require('./controller/Person');
 const StoryController = require('./controller/Story');
 const TaskController = require('./controller/Task');
 
 const BurndownRouter = require('./routers/Burndown');
+const PersonRouter = require('./routers/Person');
 const StoryRouter = require('./routers/Story');
 const TaskRouter = require('./routers/Task');
 
@@ -82,6 +85,9 @@ module.exports.prepareRoutes = async function(socketio) {
     permissionsService.setStoryDao(daos.storyDao);
     permissionsService.setTeamDao(daos.teamDao);
 
+    let personService = new PersonService();
+    personService.setTeamDao(daos.teamDao);
+
     let storyService = new StoryService();
     storyService.setStoryDao(daos.storyDao);
     storyService.setTeamDao(daos.teamDao);
@@ -104,6 +110,10 @@ module.exports.prepareRoutes = async function(socketio) {
     let permissionsController = new PermissionsController();
     permissionsController.setPermissionsService(permissionsService);
 
+    let personController = new PersonController();
+    personController.setSocketIO(socketio);
+    personController.setPersonService(personService);
+
     let storyController = new StoryController();
     storyController.setSocketIO(socketio);
     storyController.setStoryService(storyService);
@@ -116,6 +126,10 @@ module.exports.prepareRoutes = async function(socketio) {
     let burndownRouter = new BurndownRouter();
     burndownRouter.setPermissionsController(permissionsController);
     burndownRouter.setController(burndownController);
+
+    let personRouter = new PersonRouter();
+    personRouter.setPermissionsController(permissionsController);
+    personRouter.setController(personController);
 
     let storyRouter = new StoryRouter();
     storyRouter.setPermissionsController(permissionsController);
@@ -131,9 +145,10 @@ module.exports.prepareRoutes = async function(socketio) {
 
     routes.get('/', loggedInRedirect, (req, res) => res.render('pages/index'));
 
+    routes.use('/teams/:teamId/burndown', burndownRouter.expressRouter);
+    routes.use('/teams/:teamId/people', personRouter.expressRouter);
     routes.use('/teams/:teamId/stories', storyRouter.expressRouter);
     routes.use('/teams/:teamId/stories/:storyId/tasks', taskRouter.expressRouter);
-    routes.use('/teams/:teamId/burndown', burndownRouter.expressRouter);
 
     return routes;
 };
