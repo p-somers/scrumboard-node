@@ -6,7 +6,7 @@ function isLoggedIn(req) {
     return false;
 }
 
-function requiresLogin(req, res, next) {
+function requiresLoginFn(req, res, next) {
     if (isLoggedIn(req)) {
         next();
     } else {
@@ -26,7 +26,7 @@ class Router {
      */
     addRoute(expressRouter, requiresLogin, method, path, controllerFuncName, paramMappingFunc, permissionChecks) {
         let router = this;
-        let beforeFns = requiresLogin ? [requiresLogin] : [];
+        let beforeFns = requiresLogin ? [requiresLoginFn] : [];
         if (Array.isArray(permissionChecks)) {
             beforeFns = permissionChecks.map(fnName => {
                 if (typeof router.permissionsController[fnName] === 'function') {
