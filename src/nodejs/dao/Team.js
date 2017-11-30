@@ -1,9 +1,23 @@
 const DaoObj = require('./Dao');
 const table = 'teams';
+const uuidV4 = require('uuid/v4');
+const defaultColumns = ['Not Started', 'In Progress', 'To Be Verified', 'Done'];
 
 class Team extends DaoObj {
     constructor() {
         super(table);
+    }
+
+    async addTeam(companyId, name) {
+        return this.insert(
+            {
+                '_id': uuidV4(),
+                name,
+                companyId,
+                'people': [],
+                'columnNames': defaultColumns
+            }
+        );
     }
 
     async findTeam(teamId) {

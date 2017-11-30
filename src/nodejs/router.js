@@ -7,6 +7,7 @@ const GoogleAuthService = require('./service/GoogleAuth');
 const PermissionsService = require('./service/Permission');
 const PersonService = require('./service/Person');
 const StoryService = require('./service/Story');
+const TeamService = require('./service/Team');
 
 const BurndownController = require('./controller/Burndown');
 const DefaultController = require('./controller/Default');
@@ -15,11 +16,13 @@ const PermissionsController = require('./controller/Permissions');
 const PersonController = require('./controller/Person');
 const StoryController = require('./controller/Story');
 const TaskController = require('./controller/Task');
+const TeamController = require('./controller/Team');
 
 const BurndownRouter = require('./routers/Burndown');
 const PersonRouter = require('./routers/Person');
 const StoryRouter = require('./routers/Story');
 const TaskRouter = require('./routers/Task');
+const TeamRouter = require('./routers/Team');
 
 function requiresLoginRedirect(req, res, next) {
     if (isLoggedIn(req)) {
@@ -96,6 +99,9 @@ module.exports.prepareRoutes = async function(socketio) {
     burndownService.setBurndownDao(daos.burndownDao);
     burndownService.setStoryService(storyService);
 
+    let teamService = new TeamService();
+    teamService.setTeamDao(daos.teamDao);
+
     // Controllers ------------------------------------------------------------
     let burndownController = new BurndownController();
     burndownController.setBurndownService(burndownService);
@@ -122,6 +128,10 @@ module.exports.prepareRoutes = async function(socketio) {
     taskController.setSocketIO(socketio);
     taskController.setStoryService(storyService);
 
+    let teamController = new TeamController();
+    teamController.setSocketIO(socketio);
+    teamController.setTeamService(teamService);
+
     // Routers ----------------------------------------------------------------
     let burndownRouter = new BurndownRouter();
     burndownRouter.setPermissionsController(permissionsController);
@@ -139,12 +149,17 @@ module.exports.prepareRoutes = async function(socketio) {
     taskRouter.setPermissionsController(permissionsController);
     taskRouter.setController(taskController);
 
+    let teamRouter = new TeamRouter();
+    teamRouter.setPermissionsController(permissionsController);
+    teamRouter.setController(teamController);
+
     // Routes -----------------------------------------------------------------
     routes.get('/home', requiresLoginRedirect, c(defaultController, defaultController.home, (req, res) => [req.session.userId, res]));
     routes.get('/google/saveAuth', c(googleAuthController, googleAuthController.saveAuth, (req, res) => [req.session.userId, req.query.code, res]));
 
     routes.get('/', loggedInRedirect, (req, res) => res.render('pages/index'));
 
+    routes.use('/teams', teamRouter.expressRouter);
     routes.use('/teams/:teamId/burndown', burndownRouter.expressRouter);
     routes.use('/teams/:teamId/people', personRouter.expressRouter);
     routes.use('/teams/:teamId/stories', storyRouter.expressRouter);
