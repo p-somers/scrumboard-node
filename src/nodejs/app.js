@@ -44,10 +44,8 @@ module.exports = async function(_config) {
     app.use(sessionMiddleware);
 
     try {
-        const routes = await require('./controllers')(socketio);
-        const moreRoutes = await require('./router').prepareRoutes(socketio);
+        const routes = await require('./router').prepareRoutes(socketio);
         app.use('/', routes);
-        app.use('/', moreRoutes);
     }
     catch(ex) {
         console.error(ex);
