@@ -63,8 +63,9 @@ class Router {
                 result.type = 'success';
                 return res.json(result);
             } catch (error) {
-                console.error(error);
-                return res.status(500).send('Internal Server Error');
+                //console.error(error);
+                //return res.status(500).send('Internal Server Error');
+                next(error);
             }
         }
     }

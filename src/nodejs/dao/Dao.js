@@ -24,6 +24,10 @@ class DaoObj {
         });
     }
 
+    findOne(filter) {
+        return this.collection.findOne(filter || {});
+    }
+
     find(filter) {
         let daoObj = this;
         return new Promise((resolve, reject) => {
