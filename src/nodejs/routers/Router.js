@@ -61,11 +61,22 @@ class Router {
                     result = {};
                 }
                 result.type = 'success';
-                return res.json(result);
+                if (result.redirectUrl) {
+                    res.redirect(result.redirectUrl);
+                } else {
+                    return res.json(result);
+                }
             } catch (error) {
-                //console.error(error);
-                //return res.status(500).send('Internal Server Error');
-                next(error);
+                console.error(error);
+                switch(error.status) {
+                    case 401:
+                        res.status(401).send(error.message);
+                    case undefined:
+                    case 500:
+                        res.status(500).send('Internal Server Error');
+                        break;
+                }
+                //next(error);
             }
         }
     }
