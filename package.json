@@ -31,16 +31,16 @@
     "uuid": "3.0.1"
   },
   "devDependencies": {
-    "chai": "^4.1.1",
-    "jasmine-core": "^2.7.0",
-    "karma": "^1.7.0",
+    "chai": "^4.1.2",
+    "jasmine-core": "^2.8.0",
+    "karma": "^1.7.1",
     "karma-cli": "^1.0.1",
-    "karma-jasmine": "^1.1.0",
+    "karma-jasmine": "^1.1.1",
     "karma-phantomjs-launcher": "^1.0.4",
-    "mocha": "^3.5.0",
-    "nyc": "^11.3.0",
+    "mocha": "^3.5.3",
+    "nyc": "^11.4.1",
     "phantomjs": "^2.1.7",
-    "wdio": "^0.3.3",
-    "wdio-mocha-framework": "^0.5.10"
+    "wdio": "^0.3.4",
+    "wdio-mocha-framework": "^0.5.12"
   }
 }
