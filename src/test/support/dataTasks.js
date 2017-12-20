@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const MongoClient = require('mongodb').MongoClient;
 const tables = ['users', 'companies', 'teams', 'burndowns', 'tasks', 'stories'];
-const dataDir = path.resolve(__dirname, '..\\data');
+const dataDir = path.resolve(__dirname, path.join('..', 'data'));
 
 module.exports = async function(url) {
     let db = await MongoClient.connect(url);
