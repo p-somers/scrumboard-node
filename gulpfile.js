@@ -41,6 +41,11 @@ gulp.task('views', function() {
         .pipe(gulp.dest('build/views'));
 });
 
+gulp.task('tests', function() {
+    gulp.src('src/test/**')
+        .pipe(gulp.dest('build/tests'));
+});
+
 gulp.task('images', function() {
     gulp.src('src/images/**')
         .pipe(gulp.dest('build/assets/images'));
@@ -93,7 +98,7 @@ gulp.task('fonts-debug', function() {
 });
 
 
-gulp.task('build', ['clean', 'bin', 'scss', 'css', 'nodejs', 'js', 'images', 'fonts', 'views'], function() {
+gulp.task('build', ['clean', 'bin', 'scss', 'css', 'nodejs', 'js', 'images', 'fonts', 'views', 'tests'], function() {
 
 });
 
